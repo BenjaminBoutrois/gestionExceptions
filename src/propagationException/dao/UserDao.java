@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import propagationException.exceptions.DatabaseConnectionException;
 import propagationException.exceptions.DatabaseException;
 import propagationException.exceptions.SQLDriverNotFoundException;
 import propagationException.exceptions.ServiceException;
@@ -33,17 +34,17 @@ public class UserDao
 					+ dateNaissance + "'" + ")";
 			st.executeUpdate(sql);
 		}
-		catch (SQLException e)
-		{
-			DatabaseException databaseException = new DatabaseException("SQL Exception", e);
-			
-			throw databaseException;
-		}
 		catch (ClassNotFoundException e)
 		{
 			SQLDriverNotFoundException sqlDriverNotFoundException = new SQLDriverNotFoundException(e);
 			
 			throw sqlDriverNotFoundException;
+		}
+		catch (SQLException e)
+		{
+			DatabaseConnectionException databaseConnectionException = new DatabaseConnectionException("SQL Exception", e);
+			
+			throw databaseConnectionException;
 		}
 		finally
 		{
